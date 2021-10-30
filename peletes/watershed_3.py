@@ -14,7 +14,7 @@ import cv2
 img = cv2.imread('img/2.jpg')
 ds_factor = 0.2
 image = cv2.resize(img, (int(img.shape[1] * ds_factor),int(img.shape[0] * ds_factor)), interpolation = cv2.INTER_AREA)
-razao = (7.0/100.0)*ds_factor #7mm dividido por 100 pixels
+razao = (7.0/135.0) #7mm dividido por 100 pixels
 
 
 # load the image and perform pyramid mean shift filtering
@@ -62,8 +62,8 @@ for label in np.unique(labels):
 	min_rect = np.int0(cv2.boxPoints(minRect))
 	cv2.drawContours(image, [min_rect], 0, (0, 255, 0), 2)
 	#cv2.rectangle(image, min_rect, (0, 255, 0), 2)
-	x_mm = width * razao
-	y_mm = height * razao
+	x_mm = width * razao * (1/ds_factor)
+	y_mm = height * razao * (1/ds_factor)
 	area = x_mm * y_mm
 	#cv2.putText(image, "{} mm²".format(area), (int(x) - 10, int(y)),cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 	cv2.putText(image, "{}".format(label), (int(x) - 10, int(y)),cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
