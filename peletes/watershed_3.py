@@ -11,12 +11,18 @@ import cv2
 # ap.add_argument("-i", "--image", required=True,
 # 	help="path to input image")
 # args = vars(ap.parse_args())
-img = cv2.imread('img/2.jpg')
-ds_factor = 0.2
+img = cv2.imread('img/tar_ver_2.jpg')
+ds_factor = 1
 image = cv2.resize(img, (int(img.shape[1] * ds_factor),int(img.shape[0] * ds_factor)), interpolation = cv2.INTER_AREA)
 razao = (7.0/135.0) #7mm dividido por 100 pixels
 
 
+brightness = 100
+contrast = 100
+img = np.int16(image)
+img = img * (contrast/127+1) - contrast + brightness
+img = np.clip(img, 0, 255)
+img = np.uint8(img)
 # load the image and perform pyramid mean shift filtering
 # to aid the thresholding step
 # image = cv2.imread(args["image"])
@@ -33,7 +39,7 @@ thresh = 255 - thresh
 # pixel to the nearest zero pixel, then find peaks in this
 # distance map
 D = ndimage.distance_transform_edt(thresh)
-localMax = peak_local_max(D, indices=False, min_distance=15,
+localMax = peak_local_max(D, indices=False, min_distance=int(100*ds_factor),
 	labels=thresh)
 # perform a connected component analysis on the local peaks,
 # using 8-connectivity, then appy the Watershed algorithm
